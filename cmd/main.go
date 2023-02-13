@@ -3,6 +3,7 @@ package main
 import (
 	"ActiveCitizenRESTAPI/controller"
 	"ActiveCitizenRESTAPI/database"
+	"ActiveCitizenRESTAPI/middleware"
 	"ActiveCitizenRESTAPI/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -24,11 +25,20 @@ func loadDatabase() {
 func serverApp() {
 	router := gin.Default()
 
-	router.POST("/addreport", controller.AddReport)
-	router.PUT("/updatereport", controller.UpdateReport)
-	router.GET("/getreports", controller.GetReports)
-	router.GET("/getreport", controller.GetReport)
-	router.DELETE("/deletereport", controller.DeleteReport)
+	auth := router.Group("/api")
+	auth.Use(middleware.JWTAuthMiddleware())
+
+	auth.POST("/addreport", controller.AddReport)
+	auth.PUT("/updatereport", controller.UpdateReport)
+	auth.GET("/getreports", controller.GetReports)
+	auth.GET("/getreport", controller.GetReport)
+	auth.DELETE("/deletereport", controller.DeleteReport)
+
+	//router.POST("/addreport", controller.AddReport)
+	//router.PUT("/updatereport", controller.UpdateReport)
+	//router.GET("/getreports", controller.GetReports)
+	//router.GET("/getreport", controller.GetReport)
+	//router.DELETE("/deletereport", controller.DeleteReport)
 
 	publicRoutes := router.Group("/auth")
 
