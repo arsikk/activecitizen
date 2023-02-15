@@ -20,6 +20,7 @@ func loadDatabase() {
 	database.Connect()
 	database.Database.AutoMigrate(&models.User{})
 	database.Database.AutoMigrate(&models.Report{})
+	database.Database.AutoMigrate(&models.Roles{})
 }
 
 func serverApp() {
@@ -39,6 +40,7 @@ func serverApp() {
 	//router.GET("/getreports", controller.GetReports)
 	//router.GET("/getreport", controller.GetReport)
 	//router.DELETE("/deletereport", controller.DeleteReport)
+	fmt.Println("test")
 
 	publicRoutes := router.Group("/auth")
 

@@ -13,6 +13,7 @@ type User struct {
 	Username string `json:"id"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Roleid   int    `json:"roleid"`
 }
 
 func (user *User) Save() (*User, error) {

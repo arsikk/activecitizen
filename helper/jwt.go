@@ -17,9 +17,10 @@ var tokenKey string = "2000"
 func GenerateJWT(user models.User) (string, error) {
 	tokenTTL, _ := strconv.Atoi(tokenKey)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  user.ID,
-		"iat": time.Now().Unix(),
-		"eat": time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
+		"id":     user.ID,
+		"iat":    time.Now().Unix(),
+		"eat":    time.Now().Add(time.Second * time.Duration(tokenTTL)).Unix(),
+		"roleId": user.Roleid,
 	})
 	return token.SignedString(privateKey)
 }
