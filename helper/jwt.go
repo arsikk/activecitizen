@@ -26,7 +26,7 @@ func GenerateJWT(user models.User) (string, error) {
 }
 
 func ValidateJWT(context *gin.Context) error {
-	token, err := getToken(context)
+	token, err := GetToken(context)
 	if err != nil {
 		return err
 	}
@@ -37,24 +37,24 @@ func ValidateJWT(context *gin.Context) error {
 	return errors.New("invalid token provided")
 }
 
-func CurrentUser(context *gin.Context) (models.User, error) {
+func CurrentUser(context *gin.Context) models.User {
 	err := ValidateJWT(context)
 	if err != nil {
-		return models.User{}, err
+		return models.User{}
 	}
-	token, _ := getToken(context)
+	token, _ := GetToken(context)
 	claims, _ := token.Claims.(jwt.MapClaims)
 	userId := uint(claims["id"].(float64))
 
 	user, err := models.FindUserById(userId)
 	if err != nil {
-		return models.User{}, err
+		return models.User{}
 	}
-	return user, nil
+	return user
 }
 
-func getToken(context *gin.Context) (*jwt.Token, error) {
-	tokenString := getTokenFromRequest(context)
+func GetToken(context *gin.Context) (*jwt.Token, error) {
+	tokenString := GetTokenFromRequest(context)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -65,7 +65,7 @@ func getToken(context *gin.Context) (*jwt.Token, error) {
 	return token, err
 }
 
-func getTokenFromRequest(context *gin.Context) string {
+func GetTokenFromRequest(context *gin.Context) string {
 	bearerToken := context.Request.Header.Get("Authorization")
 	splitToken := strings.Split(bearerToken, " ")
 	if len(splitToken) == 2 {

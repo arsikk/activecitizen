@@ -18,9 +18,8 @@ func main() {
 
 func loadDatabase() {
 	database.Connect()
-	database.Database.AutoMigrate(&models.User{})
-	database.Database.AutoMigrate(&models.Report{})
-	database.Database.AutoMigrate(&models.Roles{})
+	database.Database.AutoMigrate(&models.User{}, &models.Report{}, &models.Roles{})
+
 }
 
 func serverApp() {

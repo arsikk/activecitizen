@@ -8,7 +8,7 @@ import (
 
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		err := helper.ValidateJWT(context)
+		err := helper.CurrentUser(context)
 		if err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication required"})
 			context.Abort()
